@@ -1,5 +1,8 @@
-﻿using Dibware.UnityStateManager.Assets.Scripts.Resources;
+﻿using Assets.Scripts.SceneManager;
+using Dibware.UnityStateManager.Assets.Scripts.Resources;
 using Dibware.UnityStateManager.Assets.Scripts.SceneManager;
+using RuleEngine.Contracts;
+using RuleEngine.Engine;
 using UnityEngine;
 
 namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
@@ -50,7 +53,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
         {
             get
             {
-                // First check if we have areference to the instance has...
+                // First check if we have a reference to the instance has...
                 if (State._instance == null)
                 {
                     // ... we dont, so see if we can get one if one exists... 
@@ -69,9 +72,9 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
         }
 
         /// <summary>
-        /// Gets (or privately sets) the game scene manager.
+        /// Gets or sets the game scene manager.
         /// </summary>
-        private GameSceneManager SceneManager { get; private set; };
+        private GameSceneManager SceneManager { get; set; }
 
         #endregion
 
@@ -88,7 +91,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
             // ... we still dont so we need to create one
             GameObject gameObject = new GameObject(StateManagerKeys.GameManger);
 
-            // We need to ensure that the instance is not distroyed when 
+            // We need to ensure that the instance is not destroyed when 
             // loading or changing to a new Scene
             DontDestroyOnLoad(gameObject);
 
@@ -108,8 +111,36 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
         /// <returns></returns>
         private static GameSceneManager CreateSceneManager()
         {
- 	        return new GameSceneManager();
+            // Create a new rule engine
+            RuleEngine<GameSceneTransition> ruleEngine = new RuleEngine<GameSceneTransition>();
+
+            // Add the rules
+            // TODO: AddGameSceneTransitionRules(ruleEngine);
+
+            // Create the scene manager with the rule engine
+            return new GameSceneManager(ruleEngine as IRuleEngine);
         }
+
+        ///// <summary>
+        ///// Adds the game scene transition rules to the specifed rule engine.
+        ///// </summary>
+        ///// <param name="ruleEngine">The rule engine to add rules to.</param>
+        //private static void AddGameSceneTransitionRules(RuleEngine<GameSceneTransition> ruleEngine)
+        //{
+        //    // Create the game scene transition
+        //    GameSceneTransition nullToIntro = new GameSceneTransition(GameScene.NullScene, GameScene.Intro);
+        //    GameSceneTransition introToMainMenu = new GameSceneTransition(GameScene.Intro, GameScene.MainMenu);
+        //    GameSceneTransition mainMenuToNewGame = new GameSceneTransition(GameScene.MainMenu, GameScene.NewGame);
+
+        //    // Create the rules
+        //    var transitionNullToIntro = new SceneTransitionRule(nullToIntro);
+        //    var transitionIntroToMainMenu = new SceneTransitionRule(introToMainMenu);
+        //    var transitionMainMenuToNewGame = new SceneTransitionRule(mainMenuToNewGame);
+
+        //    sceneTransitionRuleEngine.Add(transitionNullToIntro);
+        //    sceneTransitionRuleEngine.Add(transitionIntroToMainMenu);
+        //    sceneTransitionRuleEngine.Add(transitionMainMenuToNewGame);
+        //}
 
         #endregion
     }
