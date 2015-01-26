@@ -32,6 +32,11 @@ namespace Assets.Scripts.SceneManager
         NewGame,
 
         /// <summary>
+        /// The scene where a game is loaded.
+        /// </summary>
+        LoadGame,
+
+        /// <summary>
         /// The scene where the game is played.
         /// </summary>
         PlayGame,

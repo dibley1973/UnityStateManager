@@ -112,35 +112,48 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
         private static GameSceneManager CreateSceneManager()
         {
             // Create a new rule engine
-            RuleEngine<GameSceneTransition> ruleEngine = new RuleEngine<GameSceneTransition>();
+            RuleEngine<GameSceneTransition> sceneTransitionRuleEngine = new RuleEngine<GameSceneTransition>();
 
             // Add the rules
-            // TODO: AddGameSceneTransitionRules(ruleEngine);
+            AddGameSceneTransitionRules(sceneTransitionRuleEngine);
 
             // Create the scene manager with the rule engine
-            return new GameSceneManager(ruleEngine as IRuleEngine);
+            return new GameSceneManager(sceneTransitionRuleEngine as IRuleEngine);
         }
 
-        ///// <summary>
-        ///// Adds the game scene transition rules to the specifed rule engine.
-        ///// </summary>
-        ///// <param name="ruleEngine">The rule engine to add rules to.</param>
-        //private static void AddGameSceneTransitionRules(RuleEngine<GameSceneTransition> ruleEngine)
-        //{
-        //    // Create the game scene transition
-        //    GameSceneTransition nullToIntro = new GameSceneTransition(GameScene.NullScene, GameScene.Intro);
-        //    GameSceneTransition introToMainMenu = new GameSceneTransition(GameScene.Intro, GameScene.MainMenu);
-        //    GameSceneTransition mainMenuToNewGame = new GameSceneTransition(GameScene.MainMenu, GameScene.NewGame);
+        /// <summary>
+        /// Adds the game scene transition rules to the specifed rule engine.
+        /// </summary>
+        /// <param name="sceneTransitionRuleEngine">The game scene rule engine to add rules to.</param>
+        private static void AddGameSceneTransitionRules(RuleEngine<GameSceneTransition> sceneTransitionRuleEngine)
+        {
+            // Create the game scene transition
+            GameSceneTransition nullToIntro = new GameSceneTransition(GameSceneIdentifier.Null, GameSceneIdentifier.Intro);
+            GameSceneTransition introToMainMenu = new GameSceneTransition(GameSceneIdentifier.Intro, GameSceneIdentifier.MainMenu);
+            GameSceneTransition mainMenuToNewGame = new GameSceneTransition(GameSceneIdentifier.MainMenu, GameSceneIdentifier.NewGame);
+            GameSceneTransition mainMenuToLoadGame = new GameSceneTransition(GameSceneIdentifier.MainMenu, GameSceneIdentifier.LoadGame);
+            GameSceneTransition mainMenuToPlayGame = new GameSceneTransition(GameSceneIdentifier.MainMenu, GameSceneIdentifier.PlayGame);
+            GameSceneTransition mainMenuToSaveGame = new GameSceneTransition(GameSceneIdentifier.MainMenu, GameSceneIdentifier.SaveGame);
+            GameSceneTransition mainMenuToQuitGame = new GameSceneTransition(GameSceneIdentifier.MainMenu, GameSceneIdentifier.QuitGame);
 
-        //    // Create the rules
-        //    var transitionNullToIntro = new SceneTransitionRule(nullToIntro);
-        //    var transitionIntroToMainMenu = new SceneTransitionRule(introToMainMenu);
-        //    var transitionMainMenuToNewGame = new SceneTransitionRule(mainMenuToNewGame);
+            // Create the rules
+            var transitionNullToIntro = new GameSceneTransitionRule(nullToIntro);
+            var transitionIntroToMainMenu = new GameSceneTransitionRule(introToMainMenu);
+            var transitionMainMenuToNewGame = new GameSceneTransitionRule(mainMenuToNewGame);
+            var transitionmainMenuToLoadGame = new GameSceneTransitionRule(mainMenuToLoadGame);
+            var transitionmainMenuToPlayGame = new GameSceneTransitionRule(mainMenuToPlayGame);
+            var transitionmainMenuToSaveGame = new GameSceneTransitionRule(mainMenuToSaveGame);
+            var transitionmainMenuToQuitGame = new GameSceneTransitionRule(mainMenuToQuitGame);
 
-        //    sceneTransitionRuleEngine.Add(transitionNullToIntro);
-        //    sceneTransitionRuleEngine.Add(transitionIntroToMainMenu);
-        //    sceneTransitionRuleEngine.Add(transitionMainMenuToNewGame);
-        //}
+            // Add the rules to the engine
+            sceneTransitionRuleEngine.Add(transitionNullToIntro);
+            sceneTransitionRuleEngine.Add(transitionIntroToMainMenu);
+            sceneTransitionRuleEngine.Add(transitionMainMenuToNewGame);
+            sceneTransitionRuleEngine.Add(transitionmainMenuToLoadGame);
+            sceneTransitionRuleEngine.Add(transitionmainMenuToPlayGame);
+            sceneTransitionRuleEngine.Add(transitionmainMenuToSaveGame);
+            sceneTransitionRuleEngine.Add(transitionmainMenuToQuitGame);
+        }
 
         #endregion
     }
