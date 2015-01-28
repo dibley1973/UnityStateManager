@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.SceneManager;
 using Dibware.UnityStateManager.Assets.Scripts.Resources;
 using Dibware.UnityStateManager.Assets.Scripts.SceneManager;
-using RuleEngine.Contracts;
 using RuleEngine.Engine;
 using UnityEngine;
 
@@ -118,7 +117,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.StateManager
             AddGameSceneTransitionRules(sceneTransitionRuleEngine);
 
             // Create the scene manager with the rule engine
-            return new GameSceneManager(sceneTransitionRuleEngine as IRuleEngine);
+            return new GameSceneManager(sceneTransitionRuleEngine);
         }
 
         /// <summary>
