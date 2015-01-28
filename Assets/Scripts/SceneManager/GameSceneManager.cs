@@ -75,18 +75,14 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
         #region Methods
 
         /// <summary>
-        /// Sets the game scene identifier.
+        /// Calls the game scenetransition failed call back if required.
         /// </summary>
-        /// <param name="gameSceneIdentifier">Game scene identifier.</param>
-        public void SetGameScene(GameSceneIdentifier gameSceneIdentifier)
+        /// <param name="failedReason">The failed reason.</param>
+        private void CallGameSceneTransitionFailedCallBackIfRequired(string failedReason)
         {
-            // First check if the specified game scene identifier differs from 
-            // the current game scene identifier...
-            if (this.GameSceneIdentifier != gameSceneIdentifier)
+            if (GameSceneTransitionFailedCallback != null)
             {
-                // ... it does so call a method to handle any actions we may
-                // need to perform when the game scene identifier is changed.
-                OnGameSceneChange(gameSceneIdentifier);
+                GameSceneTransitionFailedCallback(failedReason);
             }
         }
 
@@ -113,10 +109,9 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
             {
                 // It's not so we will check the GameSceneTransitionFailedCallback
                 // has a reference and call that with a parameter indicating the reason
-                if (GameSceneTransitionFailedCallback != null)
-                {
-                    GameSceneTransitionFailedCallback(GameSceneTransitionFailedReasons.InvalidTransition);
-                }
+                CallGameSceneTransitionFailedCallBackIfRequired(GameSceneTransitionFailedReasons.InvalidTransition);
+
+                // Exit the method
                 return;
             }
 
@@ -135,10 +130,9 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
             {
                 // ... it was so we will check the GameSceneTransitionFailedCallback
                 // has a reference and call that with a parameter indicating the reason
-                if (GameSceneTransitionFailedCallback != null)
-                {
-                    GameSceneTransitionFailedCallback(GameSceneTransitionFailedReasons.CancelledTransition);
-                }
+                CallGameSceneTransitionFailedCallBackIfRequired(GameSceneTransitionFailedReasons.CancelledTransition);
+
+                // Exit the method
                 return;
             }
 
@@ -194,6 +188,22 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
 
                 // Set cancelled flag scene from the event args
                 cancelled = gameSceneChangingEventArgs.Cancel;
+            }
+        }
+
+        /// <summary>
+        /// Sets the game scene identifier.
+        /// </summary>
+        /// <param name="gameSceneIdentifier">Game scene identifier.</param>
+        public void SetGameScene(GameSceneIdentifier gameSceneIdentifier)
+        {
+            // First check if the specified game scene identifier differs from 
+            // the current game scene identifier...
+            if (this.GameSceneIdentifier != gameSceneIdentifier)
+            {
+                // ... it does so call a method to handle any actions we may
+                // need to perform when the game scene identifier is changed.
+                OnGameSceneChange(gameSceneIdentifier);
             }
         }
 
