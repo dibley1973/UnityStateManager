@@ -109,7 +109,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
             bool isValidTransition = RuleEngine.MatchAll();
 
             // Check if the transition is valid...
-            if (isValidTransition)
+            if (!isValidTransition)
             {
                 // It's not so we will check the GameSceneTransitionFailedCallback
                 // has a reference and call that with a parameter indicating the reason
