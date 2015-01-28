@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Resources;
 using Assets.Scripts.SceneManager;
-using RuleEngine.Contracts;
 using RuleEngine.Engine;
 using System;
 
@@ -110,7 +109,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
             bool isValidTransition = RuleEngine.MatchAll();
 
             // Check if the transition is valid...
-            if (!isValidTransition)
+            if (isValidTransition)
             {
                 // It's not so we will check the GameSceneTransitionFailedCallback
                 // has a reference and call that with a parameter indicating the reason
@@ -118,6 +117,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
                 {
                     GameSceneTransitionFailedCallback(GameSceneTransitionFailedReasons.InvalidTransition);
                 }
+                return;
             }
 
             // As we intend to raise an event before the same scene is changed 
@@ -136,9 +136,10 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
                 // ... it was so we will check the GameSceneTransitionFailedCallback
                 // has a reference and call that with a parameter indicating the reason
                 if (GameSceneTransitionFailedCallback != null)
-                { 
+                {
                     GameSceneTransitionFailedCallback(GameSceneTransitionFailedReasons.CancelledTransition);
                 }
+                return;
             }
 
             // Getting here indicates that the event was not cancelled, so 
@@ -155,7 +156,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
         /// </summary>
         /// <param name="originalScene">Indicates the original scene.</param>
         /// <param name="newGameScene">Indicates the new game scene.</param>
-        private void RaiseGameSceneChangedEvent(GameSceneIdentifier originalSceneIdentifier, 
+        private void RaiseGameSceneChangedEvent(GameSceneIdentifier originalSceneIdentifier,
             GameSceneIdentifier newGameSceneIdentifier)
         {
             // See if we have any delgates attached that need to 
@@ -177,7 +178,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
         /// <param name="originalScene">Indicates the original scene.</param>
         /// <param name="newGameScene">Indicates the new game scene.</param>
         /// <param name="cancelled">Set to true if the scene change was cancelled.</param>
-        private void RaiseGameSceneChangingEvent(GameSceneIdentifier originalSceneIdentifier, 
+        private void RaiseGameSceneChangingEvent(GameSceneIdentifier originalSceneIdentifier,
             GameSceneIdentifier newGameSceneIdentifier, ref bool cancelled)
         {
             // First see if we have any delgates attached that need to 
