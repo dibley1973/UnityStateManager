@@ -62,6 +62,9 @@ namespace Assets.Scripts.StateManager
             // Create the scene manager with the rule engine
             GameSceneManager gameSceneManager = new GameSceneManager(sceneTransitionRuleEngine);
 
+            //var scenes = UnityEditor.EditorBuildSettings.scenes;
+            //scenes[0].
+
             // Wire up the event handlers
             gameSceneManager.GameSceneChanged += gameSceneManager_GameSceneChanged;
             gameSceneManager.GameSceneChanging += gameSceneManager_GameSceneChanging;
@@ -143,6 +146,22 @@ namespace Assets.Scripts.StateManager
             }
         }
 
+        /// <summary>
+        /// Loads the level by game scene identifier.
+        /// </summary>
+        /// <param name="gameSceneIdentifier">The game scene identifier.</param>
+        private static void LoadLevelByGameSceneIdentifier(GameSceneIdentifier gameSceneIdentifier)
+        {
+            // Get the level index from the GameSceneIdentifier. This must match 
+            // the same index as defined in Unity's Build Settings dialogue. 
+            // We will also need to explicitly cast the identifier as an int.
+            int levelIndex = (int)gameSceneIdentifier;
+
+            // Call through to the Unity Engine's method to load a scene / level 
+            // using our levelIndex. 
+            Application.LoadLevel(levelIndex);
+        }
+
         #endregion
 
         #region gameSceneManager Handler and callback Methods
@@ -155,7 +174,8 @@ namespace Assets.Scripts.StateManager
         /// <exception cref="System.NotImplementedException"></exception>
         void gameSceneManager_GameSceneChanged(object sender, GameSceneChangedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            // Load the level using the GameSceneIdentifier from the event data
+            LoadLevelByGameSceneIdentifier(e.CurrentSceneIdentifier);
         }
 
         /// <summary>

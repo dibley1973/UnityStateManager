@@ -4,7 +4,7 @@ namespace Assets.Scripts.SceneManager
     /// <summary>
     /// Represents all of the scenes which will occur in the game
     /// </summary>
-    public enum GameSceneIdentifier
+    public enum GameSceneIdentifier : int
     {
         /// <summary>
         /// The scene state of null (Before the game is initialised).
@@ -17,14 +17,14 @@ namespace Assets.Scripts.SceneManager
         Intro,
 
         /// <summary>
-        /// The scene where the player can select their profile.
-        /// </summary>
-        SelectProfile,
-
-        /// <summary>
         /// The scene where the main menu should be displayed.
         /// </summary>
         MainMenu,
+
+        /// <summary>
+        /// The scene where the player can select their profile.
+        /// </summary>
+        SelectProfile,
 
         /// <summary>
         /// The scene where a new game is created.

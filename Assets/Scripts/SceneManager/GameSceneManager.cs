@@ -89,7 +89,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
         /// <summary>
         /// Called when the game scene needs to be changed
         /// </summary>
-        /// <param name="newGameState">The identifier for the new game scene.</param>
+        /// <param name="newGameSceneIdentifier">The new game scene identifier.</param>
         private void OnGameSceneChange(GameSceneIdentifier newGameSceneIdentifier)
         {
             // We will capture the 'Original' scene as we will need to know what 
@@ -102,7 +102,9 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
             GameSceneTransition sceneTransition =
                 new GameSceneTransition(originalSceneIdentifier, newGameSceneIdentifier);
             RuleEngine.ActualValue = sceneTransition;
-            bool isValidTransition = RuleEngine.MatchAll();
+
+            // A valid transitoin is one which matches ANY of the rules
+            bool isValidTransition = RuleEngine.MatchAny();
 
             // Check if the transition is valid...
             if (!isValidTransition)
