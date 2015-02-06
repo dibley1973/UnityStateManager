@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.SceneManager;
+﻿using Assets.Scripts.EventManager;
+using Assets.Scripts.SceneManager;
 using Dibware.UnityStateManager.Assets.Scripts.SceneManager;
 using RuleEngine.Engine;
 using System.Collections.Generic;
@@ -11,12 +12,20 @@ namespace Assets.Scripts.StateManager
     /// </summary>
     public class GameManager : MonoBehaviour
     {
-        #region MyRegion
+        #region Fields
 
         /// <summary>
-        /// Gets or sets the game scene manager.
+        /// Gets (or privately sets) the game event manager.
         /// </summary>
-        internal GameSceneManager SceneManager { get; set; }
+        /// <value>
+        /// The event manager.
+        /// </value>
+        internal GameEventManager EventManager { get; private set; }
+
+        /// <summary>
+        /// Gets (or privately sets) the game scene manager.
+        /// </summary>
+        internal GameSceneManager SceneManager { get; private set; }
 
         #endregion
 
@@ -27,6 +36,9 @@ namespace Assets.Scripts.StateManager
         /// </summary>
         public GameManager()
         {
+            // Create a new EventManager and give it to the instance to use
+            EventManager = CreateEventManager();
+
             // Create a new SceneManager and give it to the instance to use
             SceneManager = CreateSceneManager();
         }
@@ -48,6 +60,19 @@ namespace Assets.Scripts.StateManager
         #region Methods
 
         /// <summary>
+        /// Creates the event  manager.
+        /// </summary>
+        /// <returns></returns>
+        private GameEventManager CreateEventManager()
+        {
+            // Create a new instance of the game's event manager
+            GameEventManager gameEventManager = new GameEventManager();
+
+            // return the scene manager
+            return gameEventManager;
+        }
+
+        /// <summary>
         /// Creates the scene manager.
         /// </summary>
         /// <returns></returns>
@@ -66,8 +91,8 @@ namespace Assets.Scripts.StateManager
             //scenes[0].
 
             // Wire up the event handlers
-            gameSceneManager.GameSceneChanged += gameSceneManager_GameSceneChanged;
-            gameSceneManager.GameSceneChanging += gameSceneManager_GameSceneChanging;
+            EventManager.GameSceneChanged += gameSceneManager_GameSceneChanged;
+            EventManager.GameSceneChanging += gameSceneManager_GameSceneChanging;
 
             // Wire up any callbacks
             gameSceneManager.GameSceneTransitionFailedCallback = gameSceneManager_GameSceneTransitionFailedCallback;

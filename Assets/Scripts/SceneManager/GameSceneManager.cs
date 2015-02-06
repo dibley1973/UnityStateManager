@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Resources;
 using Assets.Scripts.SceneManager;
+using Dibware.UnityStateManager.Assets.Scripts.StateManager;
 using RuleEngine.Engine;
 using System;
 
@@ -33,20 +34,6 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
         /// The call back to be called if the game scene transition failed.
         /// </value>
         public GameSceneTransitionFailedDelegate GameSceneTransitionFailedCallback { get; set; }
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// Occurs when the game scene has changed.
-        /// </summary>
-        public event GameSceneChangedHandler GameSceneChanged;
-
-        /// <summary>
-        /// Occurs when the game scene is changing.
-        /// </summary>
-        public event GameSceneChangingHandler GameSceneChanging;
 
         #endregion
 
@@ -125,7 +112,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
 
             // Raise the game scene changing event to give any subscribers chance
             // to cancel this process
-            RaiseGameSceneChangingEvent(originalSceneIdentifier, newGameSceneIdentifier, ref cancelled);
+            State.GameManager.EventManager.RaiseGameSceneChangingEvent(originalSceneIdentifier, newGameSceneIdentifier, ref cancelled);
 
             // Check to see if the event was cancelled...
             if (cancelled)
@@ -144,53 +131,7 @@ namespace Dibware.UnityStateManager.Assets.Scripts.SceneManager
 
             // Raise the game scene changed event to notify any listeners that 
             // the game state has changed.
-            RaiseGameSceneChangedEvent(originalSceneIdentifier, newGameSceneIdentifier);
-        }
-
-        /// <summary>
-        /// Raises the game scene changed event.
-        /// </summary>
-        /// <param name="originalScene">Indicates the original scene.</param>
-        /// <param name="newGameScene">Indicates the new game scene.</param>
-        private void RaiseGameSceneChangedEvent(GameSceneIdentifier originalSceneIdentifier,
-            GameSceneIdentifier newGameSceneIdentifier)
-        {
-            // See if we have any delgates attached that need to 
-            // be called after we change game scene
-            if (GameSceneChanged != null)
-            {
-                // Create new game scene changed event data
-                GameSceneChangedEventArgs gameSceneChangedEventArgs =
-                    new GameSceneChangedEventArgs(newGameSceneIdentifier, originalSceneIdentifier);
-
-                // Raise the event
-                GameSceneChanged(this, gameSceneChangedEventArgs);
-            }
-        }
-
-        /// <summary>
-        /// Raises the game scene changing event.
-        /// </summary>
-        /// <param name="originalScene">Indicates the original scene.</param>
-        /// <param name="newGameScene">Indicates the new game scene.</param>
-        /// <param name="cancelled">Set to true if the scene change was cancelled.</param>
-        private void RaiseGameSceneChangingEvent(GameSceneIdentifier originalSceneIdentifier,
-            GameSceneIdentifier newGameSceneIdentifier, ref bool cancelled)
-        {
-            // First see if we have any delgates attached that need to 
-            // be called before we change game scene
-            if (GameSceneChanging != null)
-            {
-                // Create new game scene changing event data
-                GameSceneChangingEventArgs gameSceneChangingEventArgs =
-                    new GameSceneChangingEventArgs(originalSceneIdentifier, newGameSceneIdentifier);
-
-                // Raise the game scene changing event handler
-                GameSceneChanging(this, gameSceneChangingEventArgs);
-
-                // Set cancelled flag scene from the event args
-                cancelled = gameSceneChangingEventArgs.Cancel;
-            }
+            State.GameManager.EventManager.RaiseGameSceneChangedEvent(originalSceneIdentifier, newGameSceneIdentifier);
         }
 
         /// <summary>
